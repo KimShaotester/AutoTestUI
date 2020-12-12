@@ -30,20 +30,6 @@ class uiauto():
     def click_by_packageName(self, packageName, timeout):
         return self.device(packageName=packageName).click_exists(timeout)
 
-class test(uiauto):
-    def __init__(self):
-        super(test, self).__init__()
-        self.ip = "192.168.81.108"
-        self.device_initialize()
-
-    def a(self):
-        self.click_by_text("开发者选项")
-
-    # def test_execution(self):
-    #     pass
-    #
-    # def teardown(self):
-    #     pass
-
-# t = test()
-# t.a()
+    def click_list_text(self, list, contains=False, timeout=2):
+        for text in list:
+            self.click_by_text(text, contains, timeout)

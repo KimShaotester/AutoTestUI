@@ -6,6 +6,10 @@ import datetime
 import time
 import threading
 
+# class Key():
+#     fetchone = "fetchone"
+#     fetchall = "fetchall"
+#
 # class SqlTool():
 #     def __init__(self):
 #         self._db = self.connect()
@@ -14,22 +18,27 @@ import threading
 #     def connect(self):
 #         return pymysql.connect("localhost", "root", "123456", "autotest")
 #
-#     def sql_filter_data(self):
-#         sql = "select "
+#     def sql_run(self, sql):
+#         return self._cursor.execute(sql)
+#
+#     def sql_filter(self, sql, filter=Key.fetchone):
+#         self.sql_run(sql)
+#         if filter == Key.fetchone:
+#             return self._cursor.fetchone()
+#         elif filter == Key.fetchall:
+#             return self._cursor.fetchall()
+#
+#     def sql_commit(self,sql):
+#         self.sql_run(sql)
+#         self._db.commit()
+#
+#     def __del__(self):
+#         self._cursor.close()
+#         self._db.close()
 
-# cursor.execute(sql)
-# data = cursor.fetchall()
 
 db = pymysql.connect("localhost", "root", "123456", "autotest")
 cursor = db.cursor()
-
-def run_clock(func):
-    def execution():
-        start = datetime.datetime.now()
-        func()
-        end = datetime.datetime.now()
-        return (start, end)
-    return execution()
 
 def run_suite(suite):
     sql = "select suiteCase from suite where suiteName = '{}'".format(suite)
@@ -80,10 +89,10 @@ def run_suite(suite):
         cursor.execute(sql)
         data = cursor.fetchone()
         script = data[0]
-        # os.system("python {} --input {}".format(script, input_json))
+        os.system("python {} --input {}".format(script, input_json))
 
-        # result = log + "\\result.json"
-        result = "C:\\Users\\jinchao\\result.json"
+        result = log + "\\result.json"
+        # result = "C:\\Users\\jinchao\\result.json"
         if os.path.exists(result):
             with open(result) as f:
                 result_dict = json.loads(f.read())
@@ -115,7 +124,7 @@ while True:
     data = cursor.fetchone()
 
     for i in range(1, data[0]+1):
-        print ("id ia {}".format(i))
+        print ("id is {}".format(i))
         sql = "select * from execute where id={}".format(i)
         cursor.execute(sql)
         data = cursor.fetchone()
@@ -139,8 +148,9 @@ while True:
             input_dict["suite"] = suite
             input_dict["ip"] = device
 
-            run_suite(suite)
-            # threading.Thread(target=run_suite, args=suite)
+            # run_suite(suite)
+            thread = threading.Thread(target=run_suite, args=(suite,))
+            thread.start()
 
         time.sleep(2)
 

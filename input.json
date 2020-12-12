@@ -1,0 +1,8 @@
+{"jobid": 4,
+ "suite": "atx_basic_info_test",
+ "ip": "192.168.81.109",
+ "parameters": {"baseurl": "http://192.168.82.106:7912",
+ "urlpath": "info",
+ "method": "get"},
+ "casename": "test_API_device_info",
+ "log": "C:\\Users\\jinchao\\AutoTest\\4\\atx_basic_info_test\\test_API_device_info"}

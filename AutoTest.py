@@ -1,10 +1,17 @@
-import unittest
+import datetime
 import argparse
 import json
-import uiauto
+from uiauto import uiauto
 
+def run_clock(func):
+    def execution():
+        start = datetime.datetime.now()
+        func()
+        end = datetime.datetime.now()
+        return (start, end)
+    return execution()
 
-class AutoTest(unittest.TestCase, uiauto):
+class AutoTest(uiauto):
     def __init__(self):
         super(AutoTest, self).__init__()
         self._parser = self.get_parser()
@@ -12,12 +19,13 @@ class AutoTest(unittest.TestCase, uiauto):
 
         self.suite = self._dict.get("suitename")
         self.case = self._dict.get("casename")
-        self.device = self._dict.get("ip")
+        self.ip = self._dict.get("ip")
         self.args = self._dict.get("parameters")
         self.job = self._dict.get("jobid")
         self.log = self._dict.get("log")
+        self.start = datetime.datetime.now()
 
-        # self.device_initialize()
+        self.device_initialize()
 
     def get_parser(self):
         self.parser = argparse.ArgumentParser()
@@ -41,19 +49,35 @@ class AutoTest(unittest.TestCase, uiauto):
         with open(result) as f:
             f.write(json.dumps(dict))
 
+    def setUp(self):
+        pass
 
-class test(AutoTest):
-    def setUp(self) -> None:
-        self.ip = "192.168.81.108"
-        self.device_initialize()
+    def tearDown(self):
+        pass
 
-    def test_a(self):
-        self.click_by_text("开发者选项")
-
-    def tearDown(self) -> None:
+    # @run_clock
+    def execute(self):
         pass
 
 
-if __name__ == '__main__':
-    t = test()
-    t.test_a()
+# import datetime
+# def run_clock(func):
+#     def execution(*args, **kwargs):
+#         start = datetime.datetime.now()
+#         func()
+#         end = datetime.datetime.now()
+#         kwargs["start"] = start
+#         kwargs["end"] = end
+#     return execution
+#
+# import time
+# @run_clock
+# def test(*args, **kwargs):
+#     print ("aaaaa")
+#     time.sleep(5)
+#     print ("bbbbb")
+#     print (kwargs["end"])
+#
+# a = test()
+# print (a)
+

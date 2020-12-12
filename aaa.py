@@ -1,23 +1,16 @@
-import json
-import datetime
+from AutoTest import AutoTest
 
-start = datetime.datetime.now()
-end = start + datetime.timedelta(seconds=20)
+class Test(AutoTest):
 
-import sys
-input = sys.argv[2]
+    def setUp(self):
+        self.system_path = self.args.get("system_path")
 
-f = open(input,"w+")
+    def test_a(self):
+        self.click_list_text(self.system_path)
 
-log = json.loads(f.read()).get("log")
-print(log)
+    def tearDown(self):
+        pass
 
-d = {
-    "result" : "pass",
-    "log" : "C:\\Users\\jinchao\\AutoTest\\a.txt",
-    "startTime" : '2020-12-10 21:46:38',
-    "endTime" : '2020-12-10 21:46:57'
-}
-
-with open("result.json") as f:
-    f.write(json.dumps(d))
+if __name__ == '__main__':
+    t = Test()
+    t.test_a()
